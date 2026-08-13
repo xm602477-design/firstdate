@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A First Date To Remember</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#F7A8B8;
+  --rose:#E87891;
+  --peach:#FFD6BA;
+  --cream:#FFF9F2;
+  --lavender:#DCCCF5;
+  --sage:#BFD8C0;
+  --gold:#C9974A;
+  --text:#5D4850;
+  --white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(circle at 10% 10%,rgba(247,168,184,.28),transparent 25%),
+    radial-gradient(circle at 90% 25%,rgba(220,204,245,.32),transparent 28%),
+    linear-gradient(180deg,#FFF9F2 0%,#FFF1F3 48%,#F7F0FA 100%);
+  color:var(--text);
+  font-family:'Cormorant Garamond',serif;
+  overflow-x:hidden;
+}
+body:before,body:after{
+  content:"✿";
+  position:fixed;
+  font-size:110px;
+  color:rgba(232,120,145,.12);
+  z-index:-1;
+  pointer-events:none;
+}
+body:before{left:-25px;top:12%;transform:rotate(-20deg)}
+body:after{right:-25px;bottom:12%;transform:rotate(20deg)}
+
+#opening{
+  position:fixed;inset:0;
+  background:linear-gradient(135deg,#FFF9F2,#FFE8EE,#EEE5FA);
+  display:flex;justify-content:center;align-items:center;
+  z-index:9999;
+}
+.opening-content{text-align:center;position:relative;padding:30px}
+.opening-content:before,.opening-content:after{
+  content:"✿";
+  position:absolute;
+  color:var(--rose);
+  font-size:55px;
+  opacity:.65;
+}
+.opening-content:before{left:-15px;top:-10px}
+.opening-content:after{right:-15px;bottom:-10px}
+.opening-content h1{
+  font-family:'Cinzel',serif;color:var(--rose);
+  letter-spacing:5px;
+}
+.open-btn{
+  margin-top:30px;padding:14px 32px;
+  background:var(--rose);border:0;border-radius:999px;
+  color:#fff;cursor:pointer;
+  box-shadow:0 8px 20px rgba(232,120,145,.25);
+}
+.main{opacity:0;transition:opacity .55s ease}
+.hero{min-height:100vh;padding:60px 20px;text-align:center}
+.container{max-width:900px;margin:auto}
+.title,.name,h2{font-family:'Cinzel',serif;color:var(--rose)}
+.title{font-size:clamp(42px,8vw,80px)}
+.line{width:120px;height:2px;background:linear-gradient(90deg,var(--peach),var(--rose),var(--lavender));margin:25px auto}
+.name{font-size:clamp(30px,5vw,48px)}
+.subtitle{font-size:20px;color:#8A6873;margin-top:10px}
+.message,.invitation,.rsvp{margin-top:55px}
+.message{
+  padding:30px;
+  background:rgba(255,255,255,.58);
+  border-radius:28px;
+  box-shadow:0 12px 35px rgba(190,130,150,.10);
+}
+.invitation{
+  padding:25px;
+  border:1px solid rgba(232,120,145,.22);
+  border-radius:28px;
+  background:rgba(255,255,255,.68);
+}
+.maps-button{
+  display:inline-block;margin-top:18px;padding:11px 20px;
+  border-radius:999px;background:var(--lavender);
+  color:#5D4850;text-decoration:none;
+}
+.itinerary-title{margin-top:70px}
+.itinerary-sub{margin:10px 0 25px;color:#8A6873}
+.schedule{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  gap:20px;
+  padding:10px 4px 25px;
+  scrollbar-width:thin;
+}
+.schedule-card{
+  flex:0 0 86%;
+  scroll-snap-align:center;
+  min-height:310px;
+  border-radius:30px;
+  padding:35px 25px;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.8);
+  box-shadow:0 15px 35px rgba(190,130,150,.14);
+  position:relative;
+  overflow:hidden;
+}
+.schedule-card:before{
+  content:"✿";
+  position:absolute;
+  right:18px;top:10px;
+  font-size:70px;color:rgba(255,255,255,.48);
+}
+.schedule-card:after{
+  content:"❀";
+  position:absolute;
+  left:18px;bottom:8px;
+  font-size:55px;color:rgba(255,255,255,.4);
+}
+.card-1{background:linear-gradient(135deg,#FFD6DF,#FFF0D8)}
+.card-2{background:linear-gradient(135deg,#DDF1DD,#FFF4D7)}
+.card-3{background:linear-gradient(135deg,#DCD3F5,#FFE1EA)}
+.card-4{background:linear-gradient(135deg,#FFD9C4,#F6D8EE)}
+.time{
+  font-family:'Cinzel',serif;
+  color:#9B5265;font-size:19px;
+  letter-spacing:2px;
+}
+.schedule-card h3{
+  font-family:'Cinzel',serif;
+  color:#624A53;font-size:30px;
+  margin:15px 0;
+}
+.schedule-card p{font-size:20px;line-height:1.4}
+.swipe-hint{font-size:15px;color:#9B7A83;margin-top:4px}
+.buttons{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:25px}
+.answer,.wa-button{
+  padding:14px 24px;border-radius:999px;
+  text-decoration:none;border:none;cursor:pointer;
+}
+.yes,.wa-button{background:var(--rose);color:#fff}
+.maybe{background:var(--lavender);color:#5D4850}
+.no{background:#E8D9D9;color:#5D4850}
+.result{
+  display:none;margin-top:30px;
+  border:1px solid rgba(232,120,145,.2);
+  padding:25px;border-radius:24px;
+  background:rgba(255,255,255,.65);
+}
+.footer{text-align:center;margin:80px 0 30px;color:#9B5265}
+.flower{
+  display:inline-block;
+  margin:0 7px;
+  color:var(--rose);
+  animation:bloom 2.8s ease-in-out infinite;
+}
+.flower:nth-child(2){animation-delay:.5s;color:#C6A2DD}
+.flower:nth-child(3){animation-delay:1s;color:#E5A36A}
+@keyframes bloom{
+  0%,100%{transform:scale(.9) rotate(-4deg);opacity:.55}
+  50%{transform:scale(1.08) rotate(4deg);opacity:1}
+}
+@media(max-width:600px){
+  .hero{padding:40px 15px}
+  .schedule-card{flex-basis:88%;min-height:300px}
+}
+
+/* Smooth-performance envelope opening */
+#opening{
+  position:fixed;inset:0;display:flex;justify-content:center;align-items:center;
+  z-index:9999;overflow:hidden;opacity:1;visibility:visible;
+  background:
+    radial-gradient(circle at 12% 15%,rgba(247,168,184,.30),transparent 22%),
+    radial-gradient(circle at 88% 18%,rgba(220,204,245,.30),transparent 24%),
+    linear-gradient(135deg,#FFF8F1 0%,#FFECEF 52%,#F3ECFA 100%);
+  transition:opacity .65s ease,visibility .65s ease;
+}
+.envelope-scene{width:min(92vw,650px);text-align:center;position:relative;z-index:2}
+.opening-kicker{font-family:'Cinzel',serif;color:#714D57;font-size:clamp(18px,3vw,25px);letter-spacing:2px}
+.opening-subtitle{margin-top:7px;color:#9A747F;font-size:18px}
+.envelope-wrap{position:relative;width:min(82vw,480px);height:330px;margin:28px auto 8px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.envelope-shadow{position:absolute;width:84%;height:28px;left:8%;bottom:7px;background:rgba(116,75,87,.12);border-radius:50%}
+.envelope{position:absolute;inset:45px 0 25px;z-index:3}
+.envelope-back,.envelope-front{position:absolute;inset:0;border-radius:8px;background:linear-gradient(145deg,#FFFDF8,#F7EBDD);border:1px solid rgba(170,120,125,.22)}
+.envelope-front{z-index:4;clip-path:polygon(0 45%,50% 75%,100% 45%,100% 100%,0 100%);background:linear-gradient(145deg,#F9E8E5,#FFF8F0)}
+.envelope-flap{
+  position:absolute;left:0;right:0;top:0;height:65%;z-index:5;
+  transform-origin:top center;background:linear-gradient(145deg,#FFFDF9,#F5E6D9);
+  clip-path:polygon(0 0,100% 0,50% 76%);
+  border-top:1px solid rgba(170,120,125,.20);
+  transition:transform .72s cubic-bezier(.25,.8,.25,1);
+  will-change:transform;
+}
+.wax-seal{
+  position:absolute;z-index:8;left:50%;top:45%;transform:translate(-50%,-50%);
+  width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,#F6B5B8,#D97883);
+  color:#FFF8F0;font-size:25px;box-shadow:0 5px 12px rgba(140,70,80,.16);
+  transition:opacity .25s ease,transform .4s ease;will-change:transform,opacity;
+}
+.letter-card{
+  position:absolute;z-index:2;left:8%;right:8%;top:25px;height:245px;
+  padding:25px 24px;border-radius:6px;background:#FFFDF8;
+  border:1px solid rgba(194,142,145,.28);box-shadow:0 8px 20px rgba(120,80,90,.10);
+  transform:translate3d(0,85px,0);opacity:0;
+  transition:transform .82s cubic-bezier(.2,.8,.2,1),opacity .35s ease;
+  will-change:transform,opacity;
+}
+.letter-card:before,.letter-card:after{content:"✿";position:absolute;color:rgba(232,120,145,.45);font-size:35px}
+.letter-card:before{left:10px;top:5px}.letter-card:after{right:10px;bottom:5px}
+.letter-flower{color:#E87891;font-size:25px}
+.letter-dear{margin-top:4px;color:#8E6872;font-style:italic;font-size:18px}
+.letter-card h2{margin:5px 0;font-family:'Cormorant Garamond',serif;font-size:clamp(23px,5vw,31px);color:#624A53}
+.letter-heart{color:#E87891;font-size:15px;margin:2px 0}
+.letter-card p{font-size:16px;line-height:1.35}.letter-card strong{color:#D76E7F}
+.letter-sign{margin-top:10px!important;font-style:italic}.letter-sign strong{font-size:20px}
+.open-letter-btn{border:0;background:transparent;color:#D76E7F;font-family:'Cormorant Garamond',serif;font-size:20px;cursor:pointer;padding:8px 15px;transition:opacity .2s ease,transform .2s ease}
+.open-letter-btn:hover{transform:translateY(-2px)}.open-letter-btn:disabled{cursor:default;opacity:.65}
+.opening-note{margin-top:10px;color:#A27D86;font-size:14px}
+.opening-petals{position:absolute;inset:0;pointer-events:none;z-index:1}
+.opening-petals span{position:absolute;color:rgba(232,120,145,.35);font-size:28px;animation:petalFloat 9s ease-in-out infinite;will-change:transform}
+.opening-petals span:nth-child(1){left:8%;top:18%}.opening-petals span:nth-child(2){left:18%;bottom:15%;animation-delay:1.1s}
+.opening-petals span:nth-child(3){right:10%;top:20%;animation-delay:2s}.opening-petals span:nth-child(4){right:20%;bottom:12%;animation-delay:.7s}
+.opening-petals span:nth-child(5){left:5%;bottom:34%;animation-delay:2.6s}.opening-petals span:nth-child(6){right:6%;bottom:38%;animation-delay:1.5s}
+@keyframes petalFloat{0%,100%{transform:translate3d(0,0,0) rotate(0deg);opacity:.35}50%{transform:translate3d(0,-12px,0) rotate(8deg);opacity:.65}}
+.envelope-wrap.open .envelope-flap{transform:rotateX(180deg);z-index:1}
+.envelope-wrap.open .wax-seal{opacity:0;transform:translate(-50%,-50%) scale(.72)}
+.envelope-wrap.open .letter-card{transform:translate3d(0,-8px,0);opacity:1;z-index:6}
+.envelope-wrap.open .envelope-front{z-index:7}
+#opening.opened{opacity:0;visibility:hidden;pointer-events:none}
+@media(max-width:600px){
+  .envelope-wrap{height:300px}.envelope{inset:50px 0 20px}
+  .letter-card{height:225px;padding:20px 16px}.letter-card p{font-size:14px}.wax-seal{width:56px;height:56px}
+}
+@media(prefers-reduced-motion:reduce){
+  .opening-petals span{animation:none}.envelope-flap,.letter-card,.wax-seal,#opening{transition-duration:.2s}
+}
+</style>
+</head>
+<body>
+
+<audio id="bgmusic" loop>
+<source src="./assets/jazz.mp3" type="audio/mpeg">
+</audio>
+
+
+<div id="opening">
+  <div class="opening-petals" aria-hidden="true">
+    <span>✿</span><span>❀</span><span>✿</span><span>❁</span><span>❀</span><span>✿</span>
+  </div>
+
+  <div class="envelope-scene">
+    <p class="opening-kicker">FOR SOMEONE SPECIAL</p>
+    <p class="opening-subtitle">there's a little invitation for you.</p>
+
+    <div class="envelope-wrap" id="envelopeWrap"
+      role="button" tabindex="0" aria-label="Open your invitation"
+      onclick="openLetter()"
+      onkeydown="if(event.key==='Enter' || event.key===' '){event.preventDefault();openLetter();}">
+      <div class="envelope-shadow"></div>
+
+      <div class="letter-card">
+        <div class="letter-flower">✿</div>
+        <p class="letter-dear">Dear</p>
+        <h2>Glenca Nicole Setiawan</h2>
+        <div class="letter-heart">♥</div>
+        <p>
+          I’ve been looking forward to this—<br>
+          our very <strong>first date</strong>.<br>
+          I hope we can make a beautiful<br>
+          memory together.
+        </p>
+        <p class="letter-sign">With sincerity,<br><strong>Okin</strong> ♥</p>
+      </div>
+
+      <div class="envelope">
+        <div class="envelope-back"></div>
+        <div class="envelope-flap"></div>
+        <div class="envelope-front"></div>
+        <div class="wax-seal">♥</div>
+      </div>
+    </div>
+    <p class="opening-note">click the letter to open it ✉️</p>
+  </div>
+</div>
+
+
+<div class="main" id="main">
+<section class="hero">
+<div class="container">
+
+<p>FIRST DATE INVITATION</p>
+<h1 class="title">A First Date<br>To Remember</h1>
+<div class="line"></div>
+
+<p>RESERVED FOR</p>
+<div class="name">Glenca Nicole Setiawan</div>
+
+<div class="countdown-grid">
+<div class="box"><div class="num" id="days">0</div><small>DAYS</small></div>
+<div class="box"><div class="num" id="hours">0</div><small>HOURS</small></div>
+<div class="box"><div class="num" id="minutes">0</div><small>MINUTES</small></div>
+<div class="box"><div class="num" id="seconds">0</div><small>SECONDS</small></div>
+</div>
+
+<div class="message">
+<p>Hi, Glenca.</p><br>
+<p>I thought our first date should be simple, fun, and something we can both remember. So, here is a little plan for our Saturday together. 🌷</p>
+</div>
+
+<div class="invitation">
+<h2>FIRST DATE</h2><br>
+<p>📍 Margo City Mall Depok</p>
+<p>📅 Saturday, 15 August 2026</p>
+<p>✨ A little walk, good food, a movie, and one cute photobox moment.</p>
+<a class="maps-button" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Margo+City+Mall+Depok">📍 Open Google Maps</a>
+</div>
+
+<div class="itinerary-title">
+<h2>Our Little Itinerary</h2>
+<p class="itinerary-sub">Swipe left to see what we are doing next ✨</p>
+
+<div class="schedule">
+  <div class="schedule-card card-1">
+    <div class="time">03:00 PM</div>
+    <h3>Meet Me 🌷</h3>
+    <p>Ketemu di Margo City, terus mulai jalan santai sambil ngobrol dan getting to know each other.</p>
+  </div>
+
+  <div class="schedule-card card-2">
+    <div class="time">03:30 PM</div>
+    <h3>Walk & Eat 🍰</h3>
+    <p>Jalan-jalan, cari makanan yang enak, dan menikmati waktu berdua sebelum film.</p>
+  </div>
+
+  <div class="schedule-card card-3">
+    <div class="time">04:00–05:00 PM</div>
+    <h3>Movie Time 🎬</h3>
+    <p>Nonton <strong>Spider-Man: Brand New Day</strong> bareng. No spoilers, just enjoy the movie. 🕷️</p>
+  </div>
+
+  <div class="schedule-card card-4">
+    <div class="time">After Movie</div>
+    <h3>SelfieTime 📸</h3>
+    <p>Photobox di SelfieTime — karena first date tanpa satu foto bareng kayaknya kurang lengkap.</p>
+  </div>
+</div>
+
+<p class="swipe-hint">← swipe →</p>
+</div>
+
+<div class="rsvp">
+<h2>Will You Go On This First Date With Me?</h2>
+<div class="buttons">
+<button class="answer yes" onclick="submitAnswer('yes')">YES, I'D LOVE TO</button>
+<button class="answer maybe" onclick="submitAnswer('maybe')">LET ME THINK</button>
+<button class="answer no" onclick="submitAnswer('no')">I'M SORRY</button>
+</div>
+<div id="result" class="result"></div>
+</div>
+
+<div class="footer"><span class="flower">✿</span> Made with a little courage by Okin <span class="flower">✿</span></div>
+
+</div>
+</section>
+</div>
+
+<script>
+let invitationOpening = false;
+
+function openLetter(){
+  if(invitationOpening) return;
+  invitationOpening = true;
+
+  const opening = document.getElementById('opening');
+  const wrap = document.getElementById('envelopeWrap');
+  const main = document.getElementById('main');
+  const music = document.getElementById('bgmusic');
+
+  music.volume = 0.35;
+  music.play().catch(()=>{});
+
+  requestAnimationFrame(() => wrap.classList.add('open'));
+
+  setTimeout(() => {
+    main.style.opacity = '1';
+  }, 520);
+
+  setTimeout(() => {
+    opening.classList.add('opened');
+  }, 5000);
+}
+
+function openInvitation(){
+  openLetter();
+}
+
+function updateCountdown(){
+const target=new Date('August 15, 2026 15:00:00').getTime();
+const now=new Date().getTime();
+const d=target-now;
+document.getElementById('days').innerText=Math.floor(d/(1000*60*60*24));
+document.getElementById('hours').innerText=Math.floor((d%(1000*60*60*24))/(1000*60*60));
+document.getElementById('minutes').innerText=Math.floor((d%(1000*60*60))/(1000*60));
+document.getElementById('seconds').innerText=Math.floor((d%(1000*60))/1000);
+}
+setInterval(updateCountdown,1000); updateCountdown();
+
+function submitAnswer(answer){
+const result=document.getElementById('result');
+let wa='';
+
+if(answer==='yes'){
+wa='https://wa.me/628975222282?text='+encodeURIComponent("Hi Okin, I'd love to go on this first date with you ❤️");
+result.innerHTML=`<h2>Perfect.</h2><br>I was hoping you'd say that.<br><br>Thank you for saying yes. Everything else is already taken care of.<br><br><a class="wa-button" target="_blank" href="${wa}">Let Okin Know Your Answer</a>`;
+}else if(answer==='maybe'){
+wa='https://wa.me/628975222282?text='+encodeURIComponent("Hi Okin, I need a little more time to think 🤍");
+result.innerHTML=`<h2>Take Your Time.</h2><br>Good things are worth thinking about. There's absolutely no rush.<br><br><a class="wa-button" target="_blank" href="${wa}">Let Okin Know Your Answer</a>`;
+}else{
+wa='https://wa.me/628975222282?text='+encodeURIComponent("Hi Okin, thank you for the invitation. 🤍");
+result.innerHTML=`<h2>Thank You.</h2><br>Thank you for taking the time to open this invitation. I truly appreciate your honesty.<br><br><a class="wa-button" target="_blank" href="${wa}">Let Okin Know Your Answer</a>`;
+}
+result.style.display='block';
+}
+</script>
+</body>
+</html>
